@@ -3,10 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ObiCalc Pro - Clinical OB/GYN Suite</title>
+  <title>ObsCalc Pro - Clinical OB/GYN Suite</title>
   <meta name="theme-color" content="#0284c7" />
+
+  <!-- PWA & Mobile Meta Tags -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ObsCalc" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <link rel="apple-touch-icon" href="./logo.svg" />
+
+  <!-- External Assets -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  
   <style>
     body { -webkit-tap-highlight-color: transparent; }
     .tab-btn.active { border-color: #0284c7; color: #0284c7; font-weight: 700; }
@@ -19,19 +30,23 @@
 
   <div class="w-full max-w-md bg-white min-h-screen flex flex-col shadow-2xl relative pb-12">
     
-    <!-- Top Header -->
-    <header class="bg-sky-600 text-white p-4 sticky top-0 z-20 flex justify-between items-center shadow-md">
-      <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-person-pregnant text-2xl"></i>
+    <!-- Top Branded Header -->
+    <header class="bg-gradient-to-r from-sky-700 via-sky-600 to-sky-700 text-white p-3.5 sticky top-0 z-20 flex justify-between items-center shadow-md border-b border-sky-500/30">
+      <div class="flex items-center space-x-3">
+        <img src="./logo.svg" alt="ObsCalc Logo" class="w-9 h-9 rounded-xl shadow-inner border border-white/20" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2764/2764433.png'" />
         <div>
-          <h1 class="font-bold text-lg leading-tight tracking-wide">ObiCalc Pro</h1>
-          <p class="text-[10px] text-sky-100 font-medium">Williams &amp; M&amp;M Protocol Engine</p>
+          <h1 class="font-extrabold text-base leading-tight tracking-wide flex items-center gap-1.5">
+            ObsCalc <span class="bg-sky-400/25 text-sky-200 text-[10px] uppercase font-black px-1.5 py-0.5 rounded tracking-wider border border-sky-300/30">Pro</span>
+          </h1>
+          <p class="text-[10px] text-sky-100/90 font-medium">Williams &amp; M&amp;M Protocol Engine</p>
         </div>
       </div>
-      <span class="text-[11px] bg-sky-800/70 px-2.5 py-1 rounded-full text-sky-100 font-semibold">Evidence-Based</span>
+      <span class="text-[11px] bg-sky-900/60 backdrop-blur-md px-2.5 py-1 rounded-full text-sky-200 font-semibold border border-sky-400/20 flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Offline
+      </span>
     </header>
 
-    <!-- Dynamic Navigation Bar -->
+    <!-- Navigation Bar -->
     <nav class="flex border-b border-slate-200 bg-white sticky top-[60px] z-10 text-xs overflow-x-auto no-scrollbar shadow-sm">
       <button onclick="switchTab('dating')" id="tab-dating" class="tab-btn active flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all whitespace-nowrap">
         <i class="fa-solid fa-calendar-day block mb-1 text-sm"></i> Dating &amp; Visits
@@ -50,12 +65,10 @@
       </button>
     </nav>
 
-    <!-- Main Content Views -->
+    <!-- Main Views -->
     <main class="p-4 flex-1 overflow-y-auto space-y-4">
       
-      <!-- ========================================== -->
       <!-- 1. PREGNANCY DATING & VISIT SCHEDULE -->
-      <!-- ========================================== -->
       <section id="view-dating" class="space-y-4">
         <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm">
           <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Menstrual Period (LMP)</label>
@@ -70,7 +83,7 @@
             <div class="inline-block mt-1 px-3 py-0.5 bg-white/20 rounded-full text-xs font-semibold" id="trimester-badge">1st Trimester</div>
           </div>
 
-          <!-- Calculated Metrics -->
+          <!-- Calculated Key Metrics -->
           <div class="grid grid-cols-2 gap-3">
             <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
               <span class="text-[11px] text-slate-500 font-medium block">Estimated Due Date (EDD)</span>
@@ -82,52 +95,47 @@
             </div>
           </div>
 
-          <!-- Automated Next Visit Schedule Card -->
+          <!-- Automated Next Visit Forecast -->
           <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 shadow-sm">
             <div class="flex items-center space-x-2 text-sky-800 mb-2">
               <i class="fa-solid fa-calendar-check text-base"></i>
-              <h3 class="font-bold text-xs uppercase tracking-wider">Calculated Next Antenatal Visit</h3>
+              <h3 class="font-bold text-xs uppercase tracking-wider">Next Antenatal Visit Date</h3>
             </div>
             <div class="text-lg font-black text-sky-950" id="next-visit-date">--</div>
-            <p class="text-xs text-sky-700 mt-1 font-medium" id="next-visit-interval">Schedule based on standard guidelines (Williams / M&amp;M).</p>
+            <p class="text-xs text-sky-700 mt-1 font-medium" id="next-visit-interval">Guideline-based visit interval.</p>
           </div>
 
           <!-- Antenatal Milestones Timeline -->
           <div class="border border-slate-200 rounded-2xl p-4 bg-white shadow-sm space-y-3">
             <div class="flex justify-between items-center">
-              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Antenatal Milestones &amp; Protocols</h3>
-              <span class="text-[10px] text-slate-400 font-medium">Williams Guidelines</span>
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Antenatal Milestones</h3>
+              <span class="text-[10px] text-slate-400 font-medium">Williams Protocol</span>
             </div>
             <div class="space-y-2 text-xs" id="milestones-container"></div>
           </div>
         </div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- 2. CLINICAL HISTORY & SYMPTOM ENGINE -->
-      <!-- ========================================== -->
+      <!-- 2. CLINICAL HISTORY & SYMPTOM PATHWAYS -->
       <section id="view-history" class="hidden space-y-4">
         <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl flex justify-between items-center">
           <div>
             <span class="text-xs text-slate-500 font-medium block">Current Clinical Stage</span>
-            <div class="text-sm font-bold text-slate-800" id="history-stage-indicator">1st Trimester Routine</div>
+            <div class="text-sm font-bold text-slate-800" id="history-stage-indicator">1st Trimester Protocols</div>
           </div>
           <button onclick="calcDating()" class="text-xs text-sky-600 font-bold hover:underline">
-            <i class="fa-solid fa-arrows-rotate mr-1"></i>Sync LMP
+            <i class="fa-solid fa-arrows-rotate mr-1"></i>Sync
           </button>
         </div>
 
         <p class="text-xs text-slate-500 px-1">
-          Select positive signs/symptoms reported during this clinical visit to view evidence-based management pathways:
+          Select positive symptoms to open evidence-based clinical management protocols:
         </p>
 
-        <!-- Dynamic Symptom Checklist with Evidence-Based Management Cards -->
         <div class="space-y-3" id="symptoms-container"></div>
       </section>
 
-      <!-- ========================================== -->
       <!-- 3. BISHOP SCORE & INDUCTION -->
-      <!-- ========================================== -->
       <section id="view-bishop" class="hidden space-y-4">
         <div id="bishop-banner" class="p-4 rounded-2xl text-center text-white bg-rose-500 shadow-md transition-all">
           <p class="text-xs uppercase tracking-wider font-semibold opacity-90">Bishop Score Total</p>
@@ -138,9 +146,7 @@
         <div class="space-y-3" id="bishop-options"></div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- 4. MTX DOSING (MOSTELLER BSA) -->
-      <!-- ========================================== -->
+      <!-- 4. MTX DOSING CALCULATOR -->
       <section id="view-mtx" class="hidden space-y-4">
         <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-3">
           <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Patient Measurements</h3>
@@ -171,9 +177,7 @@
         </div>
       </section>
 
-      <!-- ========================================== -->
       <!-- 5. BURGOS ECV PREDICTOR -->
-      <!-- ========================================== -->
       <section id="view-burgos" class="hidden space-y-4">
         <div id="burgos-banner" class="p-4 rounded-2xl text-center text-white bg-emerald-600 shadow-md">
           <p class="text-xs uppercase tracking-wider font-semibold opacity-90">Predicted ECV Success Rate</p>
@@ -187,7 +191,7 @@
     </main>
 
     <footer class="p-3 text-center text-[10px] text-slate-400 border-t border-slate-100">
-      Evidence-based obstetric protocol suite. Always corroborate with individualized clinical assessment.
+      ObsCalc Pro Clinical Engine &bull; Strictly for healthcare professionals.
     </footer>
   </div>
 
@@ -234,9 +238,9 @@
       const daysLeft = 280 - diffDays;
       document.getElementById('days-left-text').innerText = daysLeft > 0 ? `${daysLeft} days` : 'Post-term';
 
-      // Williams / M&M Next Visit Interval Algorithm
+      // Next Visit Schedule (Williams & Mudaliar Guidelines)
       let nextIntervalWeeks = 4;
-      let intervalText = "Every 4 weeks (standard routine up to 28 weeks)";
+      let intervalText = "Every 4 weeks (routine antenatal schedule up to 28 weeks)";
       if (weeks >= 28 && weeks < 36) {
         nextIntervalWeeks = 2;
         intervalText = "Every 2 weeks (28 to 36 weeks schedule)";
@@ -249,13 +253,13 @@
       document.getElementById('next-visit-date').innerText = nextVisitDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
       document.getElementById('next-visit-interval').innerText = `${intervalText} — Next visit in ${nextIntervalWeeks} week(s).`;
 
-      // Complete Clinical Milestones (Williams & M&M References)
+      // Milestones Protocol
       const milestones = [
         { name: "Early Dating & Viability Scan", range: [6, 10], note: "Crown-Rump Length (CRL) dating" },
         { name: "First Trimester Combined Screening / NT Scan", range: [11, 13], note: "Nuchal translucency + PAPP-A + free &beta;-hCG" },
-        { name: "Early OGTT (High Risk Screening)", range: [14, 16], note: "Indicated for prior GDM, obesity, or family history" },
+        { name: "Early OGTT (High Risk Screening)", range: [14, 16], note: "Indicated for prior GDM, BMI ≥ 30, or family history" },
         { name: "Targeted Imaging for Fetal Anomalies (TIFFA / Level II)", range: [18, 20], note: "Structural anatomy & cervical length" },
-        { name: "Uterine Artery Doppler (High-Risk Surveillance)", range: [20, 24], note: "Screening for pre-eclampsia / early-onset FGR" },
+        { name: "Uterine Artery Doppler (High-Risk Surveillance)", range: [20, 24], note: "Screening for early-onset PE / FGR" },
         { name: "Universal OGTT Screening (24–28 Weeks)", range: [24, 28], note: "Standard 75g 2-hr oral glucose tolerance test" },
         { name: "Anti-D Prophylaxis (for Rh-Negative Non-Sensitized)", range: [28, 28], note: "Administer 300 mcg anti-D Ig at 28 weeks" },
         { name: "Third Trimester Growth & Doppler Assessment", range: [32, 34], note: "Interval growth, amniotic fluid, umbilical Doppler" },
@@ -285,7 +289,7 @@
       renderHistorySection(weeks);
     }
 
-    // 2. EVIDENCE-BASED CLINICAL HISTORY DATABASE
+    // 2. CLINICAL HISTORY & SYMPTOMS DATABASE
     const historyProtocols = {
       first: [
         {
@@ -376,9 +380,9 @@
             <input type="checkbox" id="chk_${item.id}" onchange="toggleProtocolCard('${item.id}')" class="mt-0.5 w-5 h-5 text-sky-600 rounded border-slate-300 focus:ring-sky-500" />
             <span class="font-bold text-sm text-slate-800 leading-tight">${item.symptom}</span>
           </label>
-          <div id="box_${item.id}" class="hidden mt-2 p-3 bg-amber-50/70 border border-amber-300 rounded-xl text-xs space-y-1.5 animate-fadeIn">
+          <div id="box_${item.id}" class="hidden mt-2 p-3 bg-amber-50/70 border border-amber-300 rounded-xl text-xs space-y-1.5">
             <div class="font-bold text-amber-900 flex items-center">
-              <i class="fa-solid fa-stethoscope mr-1.5 text-amber-700"></i> Evidence-Based Clinical Action (Williams):
+              <i class="fa-solid fa-stethoscope mr-1.5 text-amber-700"></i> Clinical Management Pathway (Williams):
             </div>
             <p class="text-slate-800 leading-relaxed">${item.management}</p>
           </div>
@@ -437,7 +441,7 @@
         verdict.innerText = "Favorable Cervix (High Success for Direct Oxytocin Induction)";
       } else {
         banner.className = "p-4 rounded-2xl text-center text-white bg-rose-500 shadow-md";
-        verdict.innerText = "Unfavorable Cervix (Cervical Ripening Indicated: Dinoprostone / Foley Balloon)";
+        verdict.innerText = "Unfavorable Cervix (Ripening Indicated: Dinoprostone / Foley Balloon)";
       }
     }
 
@@ -456,7 +460,7 @@
       const alertBox = document.getElementById('mtx-protocol-alert');
       if (hcg > 5000) {
         alertBox.className = "p-3.5 rounded-xl border text-xs font-semibold bg-amber-50 text-amber-800 border-amber-300";
-        alertBox.innerHTML = "<i class='fa-solid fa-triangle-exclamation mr-1.5'></i> &beta;-hCG > 5000 mIU/mL: Higher risk of single-dose failure. Consider 2-dose protocol or surgical evaluation if eligible.";
+        alertBox.innerHTML = "<i class='fa-solid fa-triangle-exclamation mr-1.5'></i> &beta;-hCG > 5000 mIU/mL: Higher risk of single-dose failure. Consider 2-dose protocol or surgical evaluation.";
       } else {
         alertBox.className = "p-3.5 rounded-xl border text-xs font-semibold bg-emerald-50 text-emerald-800 border-emerald-200";
         alertBox.innerHTML = "<i class='fa-solid fa-circle-check mr-1.5'></i> Single-dose IM protocol suitable (&beta;-hCG &le; 5000 mIU/mL).";
@@ -501,9 +505,17 @@
       document.getElementById('burgos-prob-text').innerText = burgosSuccessRates[score];
     }
 
+    // Register Service Worker for Offline Execution
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Service Worker Active:', reg.scope))
+          .catch((err) => console.log('Service Worker Registration Failed:', err));
+      });
+    }
+
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
-      // Set default LMP to 10 weeks ago
       const d = new Date();
       d.setDate(d.getDate() - 70);
       document.getElementById('lmp-input').value = d.toISOString().split('T')[0];
