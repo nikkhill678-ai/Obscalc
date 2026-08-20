@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+
+    <!-- Outer Precision Wheel Gradient -->
+    <linearGradient id="dialGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Maternal-Fetal Silhouette Gradient -->
+    <linearGradient id="silhouetteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6" />
+      <stop offset="50%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#db2777" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter for Floating Depth -->
+    <filter id="premiumGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0c4a6e" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
+
+  <!-- Outer Precision Gestational Wheel -->
+  <g filter="url(#premiumGlow)">
+    <!-- Circumference Base Ring -->
+    <circle cx="256" cy="256" r="185" fill="none" stroke="#ffffff" stroke-width="5" stroke-opacity="0.2" />
+    <circle cx="256" cy="256" r="185" fill="none" stroke="#38bdf8" stroke-width="12" stroke-linecap="round" stroke-dasharray="820 400" transform="rotate(-75 256 256)" />
+
+    <!-- Dial Ticks (Representing Trimesters & Gestational Weeks) -->
+    <g stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-opacity="0.75">
+      <line x1="256" y1="56" x2="256" y2="76" />
+      <line x1="115" y1="115" x2="129" y2="129" />
+      <line x1="56" y1="256" x2="76" y2="256" />
+      <line x1="115" y1="397" x2="129" y2="383" />
+      <line x1="256" y1="456" x2="256" y2="436" />
+      <line x1="397" y1="397" x2="383" y2="383" />
+      <line x1="456" y1="256" x2="436" y2="256" />
+    </g>
+
+    <!-- Inner Clean Card Circle -->
+    <circle cx="256" cy="256" r="148" fill="#ffffff" />
+
+    <!-- Stylized Gestational Crescent & Maternal Contour -->
+    <path d="M 235 150 
+             C 210 150, 180 180, 180 230 
+             C 180 295, 230 355, 305 355 
+             C 320 355, 335 350, 345 340 
+             C 285 340, 225 295, 225 235 
+             C 225 195, 245 165, 270 155 
+             C 258 152, 246 150, 235 150 Z" 
+          fill="url(#dialGrad)" />
+
+    <!-- Nested Fetal Embryo / Inner Life Core -->
+    <path d="M 270 200 
+             C 255 200, 240 215, 240 240 
+             C 240 275, 270 300, 298 300 
+             C 305 300, 312 298, 318 292 
+             C 288 290, 268 268, 268 242 
+             C 268 222, 280 208, 292 202 
+             C 285 201, 278 200, 270 200 Z" 
+          fill="url(#silhouetteGrad)" />
+
+    <!-- Delicate Head Indicator Dot -->
+    <circle cx="288" cy="182" r="9" fill="url(#silhouetteGrad)" />
+  </g>
+</svg>
+
