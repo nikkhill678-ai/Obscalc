@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ObiCalc - Clinical OB/GYN Suite</title>
+  <title>ObiCalc Pro - Clinical OB/GYN Suite</title>
   <meta name="theme-color" content="#0284c7" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -11,74 +11,123 @@
     body { -webkit-tap-highlight-color: transparent; }
     .tab-btn.active { border-color: #0284c7; color: #0284c7; font-weight: 700; }
     .seg-btn.active { background-color: #0284c7; color: #ffffff; border-color: #0284c7; font-weight: 600; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col items-center">
 
-  <div class="w-full max-w-md bg-white min-h-screen flex flex-col shadow-2xl relative">
+  <div class="w-full max-w-md bg-white min-h-screen flex flex-col shadow-2xl relative pb-12">
     
     <!-- Top Header -->
     <header class="bg-sky-600 text-white p-4 sticky top-0 z-20 flex justify-between items-center shadow-md">
       <div class="flex items-center space-x-2">
         <i class="fa-solid fa-person-pregnant text-2xl"></i>
-        <h1 class="font-bold text-lg tracking-wide">ObiCalc Clinical</h1>
+        <div>
+          <h1 class="font-bold text-lg leading-tight tracking-wide">ObiCalc Pro</h1>
+          <p class="text-[10px] text-sky-100 font-medium">Williams &amp; M&amp;M Protocol Engine</p>
+        </div>
       </div>
-      <span class="text-xs bg-sky-800/60 px-2.5 py-1 rounded-full text-sky-100 font-medium">Offline Ready</span>
+      <span class="text-[11px] bg-sky-800/70 px-2.5 py-1 rounded-full text-sky-100 font-semibold">Evidence-Based</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="flex border-b border-slate-200 bg-white sticky top-[60px] z-10 text-xs overflow-x-auto no-scrollbar">
-      <button onclick="switchTab('dating')" id="tab-dating" class="tab-btn active flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all">
-        <i class="fa-solid fa-calendar-day block mb-1 text-sm"></i> Dating
+    <!-- Dynamic Navigation Bar -->
+    <nav class="flex border-b border-slate-200 bg-white sticky top-[60px] z-10 text-xs overflow-x-auto no-scrollbar shadow-sm">
+      <button onclick="switchTab('dating')" id="tab-dating" class="tab-btn active flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all whitespace-nowrap">
+        <i class="fa-solid fa-calendar-day block mb-1 text-sm"></i> Dating &amp; Visits
       </button>
-      <button onclick="switchTab('bishop')" id="tab-bishop" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all">
+      <button onclick="switchTab('history')" id="tab-history" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all whitespace-nowrap">
+        <i class="fa-solid fa-clipboard-user block mb-1 text-sm"></i> Clinical History
+      </button>
+      <button onclick="switchTab('bishop')" id="tab-bishop" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all whitespace-nowrap">
         <i class="fa-solid fa-calculator block mb-1 text-sm"></i> Bishop
       </button>
-      <button onclick="switchTab('mtx')" id="tab-mtx" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all">
+      <button onclick="switchTab('mtx')" id="tab-mtx" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all whitespace-nowrap">
         <i class="fa-solid fa-capsules block mb-1 text-sm"></i> MTX Dosing
       </button>
-      <button onclick="switchTab('burgos')" id="tab-burgos" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all">
+      <button onclick="switchTab('burgos')" id="tab-burgos" class="tab-btn flex-1 py-3 px-2 text-center border-b-2 border-transparent transition-all whitespace-nowrap">
         <i class="fa-solid fa-chart-line block mb-1 text-sm"></i> ECV Success
       </button>
     </nav>
 
-    <!-- Main Content Containers -->
+    <!-- Main Content Views -->
     <main class="p-4 flex-1 overflow-y-auto space-y-4">
       
-      <!-- 1. PREGNANCY DATING -->
+      <!-- ========================================== -->
+      <!-- 1. PREGNANCY DATING & VISIT SCHEDULE -->
+      <!-- ========================================== -->
       <section id="view-dating" class="space-y-4">
         <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm">
           <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Menstrual Period (LMP)</label>
-          <input type="date" id="lmp-input" class="w-full border border-slate-300 rounded-xl p-3 bg-white text-slate-700 font-medium focus:ring-2 focus:ring-sky-500 focus:outline-none" onchange="calcDating()" />
+          <input type="date" id="lmp-input" class="w-full border border-slate-300 rounded-xl p-3 bg-white text-slate-700 font-bold focus:ring-2 focus:ring-sky-500 focus:outline-none" onchange="calcDating()" />
         </div>
 
         <div id="dating-results" class="hidden space-y-4">
+          <!-- Gestational Age Banner -->
           <div class="bg-gradient-to-br from-sky-600 to-sky-700 text-white p-5 rounded-2xl shadow-md text-center">
-            <p class="text-xs uppercase font-medium tracking-widest text-sky-200">Gestational Age</p>
-            <div class="text-3xl font-extrabold my-1" id="ga-text">0 Weeks 0 Days</div>
-            <div class="inline-block mt-1 px-3 py-1 bg-white/20 rounded-full text-xs font-semibold" id="trimester-badge">1st Trimester</div>
+            <p class="text-xs uppercase font-semibold tracking-widest text-sky-200">Gestational Age</p>
+            <div class="text-3xl font-black my-1" id="ga-text">0 Weeks 0 Days</div>
+            <div class="inline-block mt-1 px-3 py-0.5 bg-white/20 rounded-full text-xs font-semibold" id="trimester-badge">1st Trimester</div>
           </div>
 
+          <!-- Calculated Metrics -->
           <div class="grid grid-cols-2 gap-3">
             <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium">Estimated Due Date</span>
-              <div class="text-sm font-bold text-slate-800 mt-1" id="edd-text">--</div>
+              <span class="text-[11px] text-slate-500 font-medium block">Estimated Due Date (EDD)</span>
+              <div class="text-sm font-bold text-slate-800 mt-0.5" id="edd-text">--</div>
             </div>
             <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium">Days Remaining</span>
-              <div class="text-sm font-bold text-slate-800 mt-1" id="days-left-text">--</div>
+              <span class="text-[11px] text-slate-500 font-medium block">Days Remaining</span>
+              <div class="text-sm font-bold text-slate-800 mt-0.5" id="days-left-text">--</div>
             </div>
           </div>
 
-          <!-- Milestones Checklist -->
+          <!-- Automated Next Visit Schedule Card -->
+          <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-center space-x-2 text-sky-800 mb-2">
+              <i class="fa-solid fa-calendar-check text-base"></i>
+              <h3 class="font-bold text-xs uppercase tracking-wider">Calculated Next Antenatal Visit</h3>
+            </div>
+            <div class="text-lg font-black text-sky-950" id="next-visit-date">--</div>
+            <p class="text-xs text-sky-700 mt-1 font-medium" id="next-visit-interval">Schedule based on standard guidelines (Williams / M&amp;M).</p>
+          </div>
+
+          <!-- Antenatal Milestones Timeline -->
           <div class="border border-slate-200 rounded-2xl p-4 bg-white shadow-sm space-y-3">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Antenatal Milestone Timeline</h3>
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Antenatal Milestones &amp; Protocols</h3>
+              <span class="text-[10px] text-slate-400 font-medium">Williams Guidelines</span>
+            </div>
             <div class="space-y-2 text-xs" id="milestones-container"></div>
           </div>
         </div>
       </section>
 
-      <!-- 2. BISHOP SCORE -->
+      <!-- ========================================== -->
+      <!-- 2. CLINICAL HISTORY & SYMPTOM ENGINE -->
+      <!-- ========================================== -->
+      <section id="view-history" class="hidden space-y-4">
+        <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl flex justify-between items-center">
+          <div>
+            <span class="text-xs text-slate-500 font-medium block">Current Clinical Stage</span>
+            <div class="text-sm font-bold text-slate-800" id="history-stage-indicator">1st Trimester Routine</div>
+          </div>
+          <button onclick="calcDating()" class="text-xs text-sky-600 font-bold hover:underline">
+            <i class="fa-solid fa-arrows-rotate mr-1"></i>Sync LMP
+          </button>
+        </div>
+
+        <p class="text-xs text-slate-500 px-1">
+          Select positive signs/symptoms reported during this clinical visit to view evidence-based management pathways:
+        </p>
+
+        <!-- Dynamic Symptom Checklist with Evidence-Based Management Cards -->
+        <div class="space-y-3" id="symptoms-container"></div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- 3. BISHOP SCORE & INDUCTION -->
+      <!-- ========================================== -->
       <section id="view-bishop" class="hidden space-y-4">
         <div id="bishop-banner" class="p-4 rounded-2xl text-center text-white bg-rose-500 shadow-md transition-all">
           <p class="text-xs uppercase tracking-wider font-semibold opacity-90">Bishop Score Total</p>
@@ -89,7 +138,9 @@
         <div class="space-y-3" id="bishop-options"></div>
       </section>
 
-      <!-- 3. MTX DOSING -->
+      <!-- ========================================== -->
+      <!-- 4. MTX DOSING (MOSTELLER BSA) -->
+      <!-- ========================================== -->
       <section id="view-mtx" class="hidden space-y-4">
         <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-3">
           <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Patient Measurements</h3>
@@ -104,23 +155,25 @@
             </div>
           </div>
           <div>
-            <label class="text-xs text-slate-600 font-semibold">Pre-treatment Serum β-hCG (mIU/mL)</label>
+            <label class="text-xs text-slate-600 font-semibold">Pre-treatment Serum &beta;-hCG (mIU/mL)</label>
             <input type="number" id="mtx-hcg" value="3200" class="w-full mt-1 border border-slate-300 rounded-xl p-2.5 bg-white text-slate-800 font-bold focus:ring-2 focus:ring-sky-500" oninput="calcMTX()" />
           </div>
         </div>
 
         <div class="bg-sky-600 text-white p-5 rounded-2xl text-center shadow-md">
-          <p class="text-xs uppercase font-medium text-sky-200">Recommended MTX Dose (50 mg/m²)</p>
+          <p class="text-xs uppercase font-medium text-sky-200">Recommended MTX Dose (50 mg/m&sup2;)</p>
           <div class="text-3xl font-extrabold my-1" id="mtx-dose-text">0.0 mg</div>
-          <p class="text-xs text-sky-100" id="mtx-bsa-text">Body Surface Area: 0.00 m²</p>
+          <p class="text-xs text-sky-100" id="mtx-bsa-text">Body Surface Area: 0.00 m&sup2;</p>
         </div>
 
         <div id="mtx-protocol-alert" class="p-3.5 rounded-xl border text-xs font-semibold bg-emerald-50 text-emerald-800 border-emerald-200">
-          Single-dose protocol suitable (&beta;-hCG &lt; 5000 mIU/mL).
+          Single-dose protocol suitable (&beta;-hCG &le; 5000 mIU/mL).
         </div>
       </section>
 
-      <!-- 4. BURGOS ECV PREDICTOR -->
+      <!-- ========================================== -->
+      <!-- 5. BURGOS ECV PREDICTOR -->
+      <!-- ========================================== -->
       <section id="view-burgos" class="hidden space-y-4">
         <div id="burgos-banner" class="p-4 rounded-2xl text-center text-white bg-emerald-600 shadow-md">
           <p class="text-xs uppercase tracking-wider font-semibold opacity-90">Predicted ECV Success Rate</p>
@@ -134,20 +187,25 @@
     </main>
 
     <footer class="p-3 text-center text-[10px] text-slate-400 border-t border-slate-100">
-      For clinical reference & educational use only. Verify calculations independently.
+      Evidence-based obstetric protocol suite. Always corroborate with individualized clinical assessment.
     </footer>
   </div>
 
   <script>
-    // Tab Navigation Logic
+    let currentCalculatedWeeks = 10;
+
+    // Navigation Switcher
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
       document.getElementById(`tab-${tabId}`).classList.add('active');
       document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      if (tabId === 'history') {
+        renderHistorySection(currentCalculatedWeeks);
+      }
     }
 
-    // 1. Pregnancy Dating Logic
+    // 1. DATING & NEXT VISIT COMPUTATION
     function calcDating() {
       const val = document.getElementById('lmp-input').value;
       if (!val) return;
@@ -160,50 +218,185 @@
 
       const weeks = Math.floor(diffDays / 7);
       const days = diffDays % 7;
-      document.getElementById('ga-text').innerText = `${weeks}w + ${days}d`;
+      currentCalculatedWeeks = weeks;
+
+      document.getElementById('ga-text').innerText = `${weeks} Weeks ${days} Days`;
       
       let trimester = "1st Trimester";
       if (weeks >= 14 && weeks < 28) trimester = "2nd Trimester";
       if (weeks >= 28) trimester = "3rd Trimester";
       document.getElementById('trimester-badge').innerText = trimester;
 
+      // EDD (Naegele's Rule: LMP + 280 Days)
       const edd = new Date(lmp.getTime() + (280 * 24 * 60 * 60 * 1000));
       document.getElementById('edd-text').innerText = edd.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
       const daysLeft = 280 - diffDays;
       document.getElementById('days-left-text').innerText = daysLeft > 0 ? `${daysLeft} days` : 'Post-term';
 
-      // Build Timeline
+      // Williams / M&M Next Visit Interval Algorithm
+      let nextIntervalWeeks = 4;
+      let intervalText = "Every 4 weeks (standard routine up to 28 weeks)";
+      if (weeks >= 28 && weeks < 36) {
+        nextIntervalWeeks = 2;
+        intervalText = "Every 2 weeks (28 to 36 weeks schedule)";
+      } else if (weeks >= 36) {
+        nextIntervalWeeks = 1;
+        intervalText = "Weekly visits (36 weeks to delivery)";
+      }
+
+      const nextVisitDate = new Date(today.getTime() + (nextIntervalWeeks * 7 * 24 * 60 * 60 * 1000));
+      document.getElementById('next-visit-date').innerText = nextVisitDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      document.getElementById('next-visit-interval').innerText = `${intervalText} — Next visit in ${nextIntervalWeeks} week(s).`;
+
+      // Complete Clinical Milestones (Williams & M&M References)
       const milestones = [
-        { name: "First Trimester Screening / NT Scan", range: [11, 13] },
-        { name: "Routine Anomaly Scan (TIFFA)", range: [18, 20] },
-        { name: "Uterine Artery Doppler (High Risk)", range: [20, 24] },
-        { name: "OGTT / GDM Screening", range: [24, 28] },
-        { name: "Anti-D Prophylaxis (Rh-Negative)", range: [28, 28] },
-        { name: "Antepartum Fetal Surveillance", range: [32, 36] },
-        { name: "Routine GBS Screening", range: [35, 37] }
+        { name: "Early Dating & Viability Scan", range: [6, 10], note: "Crown-Rump Length (CRL) dating" },
+        { name: "First Trimester Combined Screening / NT Scan", range: [11, 13], note: "Nuchal translucency + PAPP-A + free &beta;-hCG" },
+        { name: "Early OGTT (High Risk Screening)", range: [14, 16], note: "Indicated for prior GDM, obesity, or family history" },
+        { name: "Targeted Imaging for Fetal Anomalies (TIFFA / Level II)", range: [18, 20], note: "Structural anatomy & cervical length" },
+        { name: "Uterine Artery Doppler (High-Risk Surveillance)", range: [20, 24], note: "Screening for pre-eclampsia / early-onset FGR" },
+        { name: "Universal OGTT Screening (24–28 Weeks)", range: [24, 28], note: "Standard 75g 2-hr oral glucose tolerance test" },
+        { name: "Anti-D Prophylaxis (for Rh-Negative Non-Sensitized)", range: [28, 28], note: "Administer 300 mcg anti-D Ig at 28 weeks" },
+        { name: "Third Trimester Growth & Doppler Assessment", range: [32, 34], note: "Interval growth, amniotic fluid, umbilical Doppler" },
+        { name: "Universal GBS Screening (Vagino-Rectal Swab)", range: [35, 37], note: "Intrapartum antibiotic prophylaxis planning" }
       ];
 
       const container = document.getElementById('milestones-container');
       container.innerHTML = milestones.map(m => {
         const isPast = weeks > m.range[1];
         const isCurrent = weeks >= m.range[0] && weeks <= m.range[1];
-        let statusBadge = `<span class="text-slate-400">Upcoming (${m.range[0]}-${m.range[1]}w)</span>`;
-        if (isCurrent) statusBadge = `<span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">DUE NOW</span>`;
-        if (isPast) statusBadge = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-check mr-1"></i>Completed</span>`;
+        let statusBadge = `<span class="text-slate-400 font-medium">${m.range[0]}-${m.range[1]}w</span>`;
+        if (isCurrent) statusBadge = `<span class="bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded border border-amber-300">DUE NOW</span>`;
+        if (isPast) statusBadge = `<span class="text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Completed</span>`;
 
         return `
-          <div class="flex justify-between items-center p-2.5 rounded-lg border ${isCurrent ? 'border-amber-300 bg-amber-50/40' : 'border-slate-100 bg-slate-50'}">
-            <span class="font-semibold text-slate-700">${m.name}</span>
-            <div>${statusBadge}</div>
+          <div class="p-2.5 rounded-xl border ${isCurrent ? 'border-amber-400 bg-amber-50/50' : 'border-slate-100 bg-slate-50'} flex justify-between items-start">
+            <div>
+              <div class="font-bold text-slate-800">${m.name}</div>
+              <div class="text-[11px] text-slate-500">${m.note}</div>
+            </div>
+            <div class="text-right shrink-0 ml-2">${statusBadge}</div>
           </div>
         `;
       }).join('');
 
       document.getElementById('dating-results').classList.remove('hidden');
+      renderHistorySection(weeks);
     }
 
-    // 2. Bishop Score Logic
+    // 2. EVIDENCE-BASED CLINICAL HISTORY DATABASE
+    const historyProtocols = {
+      first: [
+        {
+          id: "t1_bleeding",
+          symptom: "Vaginal Bleeding / Spotting",
+          management: "Assess hemodynamic stability. Perform sterile speculum examination. Order Urgent Transvaginal Ultrasound (TVS) to confirm intrauterine pregnancy, fetal cardiac activity, and rule out ectopic/molar pregnancy. Check maternal blood group and administer Anti-D (50–120 mcg) if Rh-negative."
+        },
+        {
+          id: "t1_pain",
+          symptom: "Severe Unilateral Lower Abdominal Pain",
+          management: "High clinical suspicion for ectopic pregnancy or corpus luteum accident. Evaluate for peritoneal signs (guarding, rebound). Immediate TVS evaluation of adnexa and free fluid in pouch of Douglas; order baseline serum &beta;-hCG."
+        },
+        {
+          id: "t1_vomiting",
+          symptom: "Intractable Nausea / Vomiting (Hyperemesis Gravidarum)",
+          management: "Assess for ketonuria (dipstick), electrolyte derangement, and weight loss (>5% pre-pregnancy weight). Rehydrate with IV Ringer's Lactate/Normal Saline; administer IV Pyridoxine (Vitamin B6) &plus; Doxylamine or Dimenhydrinate. Add Thiamine (100 mg IV) prior to any dextrose to prevent Wernicke's encephalopathy."
+        },
+        {
+          id: "t1_fever",
+          symptom: "Fever &gt; 38&deg;C with Urinary Urgency/Dysuria",
+          management: "Evaluate for UTI/Pyelonephritis. Order clean-catch urine routine, microscopy, and culture-sensitivity. Initiate safe empiric antibiotic therapy (e.g., Nitrofurantoin [avoid at term], Amoxicillin-Clavulanate, or Cefixime). Maintain antipyresis with Paracetamol."
+        }
+      ],
+      second: [
+        {
+          id: "t2_discharge",
+          symptom: "Watery Fluid Leakage / Sudden Gush per Vaginam",
+          management: "Rule out Preterm Prelabor Rupture of Membranes (PPROM). Avoid routine digital examination. Perform sterile speculum exam for pooling of liquor in posterior fornix, Nitrazine test, and microscopic ferning. Order urgent ultrasound for AFI and maternal inflammatory markers (CBC, CRP)."
+        },
+        {
+          id: "t2_headache",
+          symptom: "Persistent Frontal Headache / Visual Blurring",
+          management: "Evaluate immediately for early Pre-eclampsia. Check blood pressure (two readings 4 hrs apart). Order spot urine protein-creatinine ratio (UPCR), CBC, serum creatinine, AST, ALT, and LDH. Initiate antihypertensive therapy if BP &ge; 140/90 mmHg."
+        },
+        {
+          id: "t2_pressure",
+          symptom: "Pelvic Pressure / Painless Cervical Mucous Discharge",
+          management: "Screen for Cervical Incompetence / Insufficiency. Arrange urgent Transvaginal Ultrasound to measure cervical length (abnormal if < 25 mm before 24 weeks) and check for funneling. Evaluate candidate for cervical cerclage or vaginal progesterone."
+        }
+      ],
+      third: [
+        {
+          id: "t3_movements",
+          symptom: "Decreased / Absent Fetal Movements (DFMR)",
+          management: "Immediate Non-Stress Test (NST / CTG) for fetal reactivity. If non-reactive or persistent reduction, perform modified Biophysical Profile (BPP) and Umbilical Artery Doppler ultrasound to rule out acute or chronic uteroplacental insufficiency."
+        },
+        {
+          id: "t3_pain_bleed",
+          symptom: "Vaginal Bleeding with Painful Uterine Hypertonus / Rigidity",
+          management: "High suspicion for Abruptio Placentae. Establish wide-bore IV access (16G), arrange cross-matched blood, draw coagulation profile (Fibrinogen, PT/INR, Platelets), and initiate continuous CTG. Expedite delivery if fetal or maternal compromise is documented."
+        },
+        {
+          id: "t3_painless_bleed",
+          symptom: "Painless, Causeless, Recurrent Fresh Vaginal Bleeding",
+          management: "Classic Placenta Previa warning. STRICT CONTRAINDICATION TO PER-VAGINAM (DIGITAL) EXAMINATION. Confirm placental localization via Transabdominal/Transvaginal Ultrasound. Admit for conservative bedrest (MacAfee regimen) if remote from term and bleeding is controlled."
+        },
+        {
+          id: "t3_epigastric",
+          symptom: "Epigastric / Right Upper Quadrant Pain with Hyperreflexia",
+          management: "Impending Eclampsia &amp; HELLP Syndrome red flag. Check BP immediately. Administer Magnesium Sulfate (Pritchard or Zuspan regimen: 4g IV loading &plus; 10g IM / 1g/hr IV infusion) for seizure prophylaxis. Check Platelets, Liver enzymes, and initiate rapid anti-hypertensive control (Labetalol / Hydralazine)."
+        },
+        {
+          id: "t3_leaking",
+          symptom: "Clear Fluid Leaking per Vaginam at Term (&ge; 37 Weeks)",
+          management: "Prelabor Rupture of Membranes at Term (TPROM). Confirm liquor per speculum. If GBS positive or > 18–24 hrs latency, initiate IV antibiotic prophylaxis (Ampicillin). Plan for labor induction (Oxytocin infusion or Prostaglandin ripening if cervix is unfavorable)."
+        }
+      ]
+    };
+
+    function renderHistorySection(weeks) {
+      let stageKey = 'first';
+      let stageTitle = '1st Trimester Protocols (0 to 13+6 Weeks)';
+      if (weeks >= 14 && weeks < 28) {
+        stageKey = 'second';
+        stageTitle = '2nd Trimester Protocols (14 to 27+6 Weeks)';
+      } else if (weeks >= 28) {
+        stageKey = 'third';
+        stageTitle = '3rd Trimester Protocols (28 to 40+ Weeks)';
+      }
+
+      document.getElementById('history-stage-indicator').innerText = stageTitle;
+      const items = historyProtocols[stageKey];
+      const container = document.getElementById('symptoms-container');
+
+      container.innerHTML = items.map(item => `
+        <div class="border border-slate-200 rounded-2xl p-4 bg-white shadow-sm transition-all space-y-2.5">
+          <label class="flex items-start space-x-3 cursor-pointer select-none">
+            <input type="checkbox" id="chk_${item.id}" onchange="toggleProtocolCard('${item.id}')" class="mt-0.5 w-5 h-5 text-sky-600 rounded border-slate-300 focus:ring-sky-500" />
+            <span class="font-bold text-sm text-slate-800 leading-tight">${item.symptom}</span>
+          </label>
+          <div id="box_${item.id}" class="hidden mt-2 p-3 bg-amber-50/70 border border-amber-300 rounded-xl text-xs space-y-1.5 animate-fadeIn">
+            <div class="font-bold text-amber-900 flex items-center">
+              <i class="fa-solid fa-stethoscope mr-1.5 text-amber-700"></i> Evidence-Based Clinical Action (Williams):
+            </div>
+            <p class="text-slate-800 leading-relaxed">${item.management}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleProtocolCard(id) {
+      const isChecked = document.getElementById(`chk_${id}`).checked;
+      const box = document.getElementById(`box_${id}`);
+      if (isChecked) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    // 3. BISHOP SCORE LOGIC
     const bishopData = [
       { name: "Dilation", opts: ["Closed (0)", "1–2 cm (1)", "3–4 cm (2)", "≥5 cm (3)"] },
       { name: "Effacement", opts: ["0–30% (0)", "40–50% (1)", "60–70% (2)", "≥80% (3)"] },
@@ -241,14 +434,14 @@
       
       if (total >= 6) {
         banner.className = "p-4 rounded-2xl text-center text-white bg-emerald-600 shadow-md";
-        verdict.innerText = "Favorable Cervix (High Success for Induction)";
+        verdict.innerText = "Favorable Cervix (High Success for Direct Oxytocin Induction)";
       } else {
         banner.className = "p-4 rounded-2xl text-center text-white bg-rose-500 shadow-md";
-        verdict.innerText = "Unfavorable Cervix (Cervical Ripening Indicated)";
+        verdict.innerText = "Unfavorable Cervix (Cervical Ripening Indicated: Dinoprostone / Foley Balloon)";
       }
     }
 
-    // 3. Methotrexate Calculation (Mosteller BSA)
+    // 4. METHOTREXATE CALCULATION (Mosteller BSA)
     function calcMTX() {
       const wt = parseFloat(document.getElementById('mtx-weight').value) || 0;
       const ht = parseFloat(document.getElementById('mtx-height').value) || 0;
@@ -263,14 +456,14 @@
       const alertBox = document.getElementById('mtx-protocol-alert');
       if (hcg > 5000) {
         alertBox.className = "p-3.5 rounded-xl border text-xs font-semibold bg-amber-50 text-amber-800 border-amber-300";
-        alertBox.innerHTML = "<i class='fa-solid fa-triangle-exclamation mr-1.5'></i> &beta;-hCG > 5000 mIU/mL: Higher risk of single-dose failure. Consider multi-dose regimen or surgical consult.";
+        alertBox.innerHTML = "<i class='fa-solid fa-triangle-exclamation mr-1.5'></i> &beta;-hCG > 5000 mIU/mL: Higher risk of single-dose failure. Consider 2-dose protocol or surgical evaluation if eligible.";
       } else {
         alertBox.className = "p-3.5 rounded-xl border text-xs font-semibold bg-emerald-50 text-emerald-800 border-emerald-200";
-        alertBox.innerHTML = "<i class='fa-solid fa-circle-check mr-1.5'></i> Single-dose protocol suitable (&beta;-hCG &le; 5000 mIU/mL).";
+        alertBox.innerHTML = "<i class='fa-solid fa-circle-check mr-1.5'></i> Single-dose IM protocol suitable (&beta;-hCG &le; 5000 mIU/mL).";
       }
     }
 
-    // 4. Burgos ECV Prediction Logic
+    // 5. BURGOS ECV PREDICTOR
     const burgosFactors = [
       { name: "Parity", opts: ["Nulliparous (+0)", "Multiparous (+1)"] },
       { name: "Placental Location", opts: ["Anterior (+0)", "Non-anterior (+1)"] },
@@ -308,7 +501,7 @@
       document.getElementById('burgos-prob-text').innerText = burgosSuccessRates[score];
     }
 
-    // Initialize Default States
+    // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
       // Set default LMP to 10 weeks ago
       const d = new Date();
@@ -322,3 +515,4 @@
   </script>
 </body>
 </html>
+
